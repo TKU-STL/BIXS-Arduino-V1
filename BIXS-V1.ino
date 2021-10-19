@@ -32,14 +32,20 @@ V10 Mike Grusin, SparkFun Electronics 10/24/2013
 // Your sketch must #include this library, and the Wire library.
 // (Wire is a standard library included with Arduino.):
 
-#include <SFE_BMP180.h>
-#include <Wire.h>
 #include <SPI.h>
+#include <Wire.h>
+#include <SFE_BMP180.h>
 #include <SparkFunLSM9DS1.h>
+#include <ClosedCube_TCA9548A.h>
 // You will need to create an SFE_BMP180 object, here called "pressure":
 
 SFE_BMP180 pressure;
 LSM9DS1 imu;
+
+const int UART_BAUD_RATE = 115200;
+#define TCA9548A_ADDR 0x70;
+
+ClosedCube::Wired::TCA9548A tca9548a;
 
 #define LSM9DS1_M  0x1E // Would be 0x1C if SDO_M is LOW
 #define LSM9DS1_AG 0x6B
@@ -59,18 +65,17 @@ void printAttitude(float ax, float ay, float az, float mx, float my, float mz);
 
 void setup()
 {
-  Serial.begin(9600);
+  Wire.begin();
+  Serial.begin(UART_BAUD_RATE);
   Serial.println("REBOOT");
 
   // Initialize the sensor (it is important to get calibration values stored on the device).
-
   if (pressure.begin())
     Serial.println("BMP180 init success");
   else
   {
     // Oops, something went wrong, this is usually a connection problem,
     // see the comments at the top of this sketch for the proper connections.
-
     Serial.println("BMP180 init fail (disconnected?)\n\n");
     while(1); // Pause forever.
   }

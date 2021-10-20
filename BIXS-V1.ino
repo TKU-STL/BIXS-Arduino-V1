@@ -42,16 +42,8 @@ V10 Mike Grusin, SparkFun Electronics 10/24/2013
 SFE_BMP180 pressure;
 LSM9DS1 imu;
 
-<<<<<<< HEAD
 #define UART_BAUD 115200
 #define TCA9548A_I2C_ADDRESS 0x70
-
-ClosedCube::Wired::TCA9548A tca9548a;
-
-#define LSM9DS1_M 0x1E // Would be 0x1C if SDO_M is LOW
-=======
-const int UART_BAUD_RATE = 115200;
-#define TCA9548A_ADDR 0x70;
 
 ClosedCube::Wired::TCA9548A tca9548a;
 
@@ -70,6 +62,7 @@ void printGyro();
 void printAccel();
 void printMag();
 void printAttitude(float ax, float ay, float az, float mx, float my, float mz);
+void printAddress(uint8_t address);
 
 void setup()
 {

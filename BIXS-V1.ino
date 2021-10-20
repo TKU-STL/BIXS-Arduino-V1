@@ -56,7 +56,6 @@ const int UART_BAUD_RATE = 115200;
 ClosedCube::Wired::TCA9548A tca9548a;
 
 #define LSM9DS1_M  0x1E // Would be 0x1C if SDO_M is LOW
->>>>>>> c2d4e555ffdac3c0516d474894c94e187343d75f
 #define LSM9DS1_AG 0x6B
 
 #define PRINT_CALCULATED

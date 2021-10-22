@@ -61,38 +61,11 @@ void printAttitude(float ax, float ay, float az, float mx, float my, float mz);
 void setup()
 {
   System_COM_Init(BAUD_RATE);
+  //Initialize the sensor (it is important to get calibration values stored on the device).
   Alt_Init();
   IMU_Init();
   //Serial.println("REBOOT");
-
-  // Initialize the sensor (it is important to get calibration values stored on the device).
-/*
-  if (pressure.begin())
-    Serial.println("BMP180 init success");
-  else
-  {
-    // Oops, something went wrong, this is usually a connection problem,
-    // see the comments at the top of this sketch for the proper connections.
-
-    Serial.println("BMP180 init fail (disconnected?)\n\n");
-    while(1); // Pause forever.
-  }
-*/
-/*
-  if (imu.begin() == false) // with no arguments, this uses default addresses (AG:0x6B, M:0x1E) and i2c port (Wire).
-  {
-     Serial.println("Failed to communicate with LSM9DS1.");
-    Serial.println("Double-check wiring.");
-    Serial.println("Default settings in this sketch will " \
-                   "work for an out of the box LSM9DS1 " \
-                   "Breakout, but may need to be modified " \
-                   "if the board jumpers are.");
-    while (1);
-  }
-
-*/
   // Get the baseline pressure:
-  
   baseline = getPressure();
   
   Serial.print("baseline pressure: ");

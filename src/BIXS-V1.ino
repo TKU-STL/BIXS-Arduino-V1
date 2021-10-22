@@ -32,20 +32,14 @@ V10 Mike Grusin, SparkFun Electronics 10/24/2013
 // Your sketch must #include this library, and the Wire library.
 // (Wire is a standard library included with Arduino.):
 
-#include <SPI.h>
-#include <Wire.h>
 #include <SFE_BMP180.h>
+#include <Wire.h>
+#include <SPI.h>
 #include <SparkFunLSM9DS1.h>
-#include <ClosedCube_TCA9548A.h>
 // You will need to create an SFE_BMP180 object, here called "pressure":
 
 SFE_BMP180 pressure;
 LSM9DS1 imu;
-
-#define UART_BAUD 115200
-#define TCA9548A_I2C_ADDRESS 0x70
-
-ClosedCube::Wired::TCA9548A tca9548a;
 
 #define LSM9DS1_M  0x1E // Would be 0x1C if SDO_M is LOW
 #define LSM9DS1_AG 0x6B
@@ -62,99 +56,50 @@ void printGyro();
 void printAccel();
 void printMag();
 void printAttitude(float ax, float ay, float az, float mx, float my, float mz);
-void printAddress(uint8_t address);
 
 void setup()
 {
-  Serial.begin(UART_BAUD);
+  Serial.begin(9600);
   Serial.println("REBOOT");
-  Wire.begin();
-
-  Serial.println("ClosedCube TCA9548A Channel Scanner Demo");
-
-  tca9548a.address(TCA9548A_I2C_ADDRESS);
-
-  uint8_t returnCode = 0;
-  uint8_t address;
-  uint8_t numberOfDevices;
-
-  for (uint8_t channel = 0; channel < TCA9548A_MAX_CHANNELS; channel++)
-  {
-    Serial.print("Scanning channel #");
-    Serial.print(channel);
-    Serial.println("...");
-
-    returnCode = tca9548a.selectChannel(channel);
-    numberOfDevices = 0;
-
-    if (returnCode == 0)
-    {
-      for (address = 0x01; address < 0x7F; address++)
-      {
-        Wire.beginTransmission(address);
-        returnCode = Wire.endTransmission();
-
-        if (returnCode == 0)
-        {
-          Serial.print("I2C device = ");
-          printAddress(address);
-
-          numberOfDevices++;
-        }
-        else if (returnCode == 4)
-        {
-          Serial.print("Unknown error at ");
-          printAddress(address);
-        }
-      }
-      if (numberOfDevices == 0)
-        Serial.println("No I2C devices found\n");
-    }
-    else
-    {
-      Serial.print("Error scan channel (Code:");
-      Serial.print(returnCode);
-      Serial.println(")");
-    }
-  }
 
   // Initialize the sensor (it is important to get calibration values stored on the device).
+
   if (pressure.begin())
     Serial.println("BMP180 init success");
   else
   {
     // Oops, something went wrong, this is usually a connection problem,
     // see the comments at the top of this sketch for the proper connections.
+
     Serial.println("BMP180 init fail (disconnected?)\n\n");
-    while (1)
-      ; // Pause forever.
+    while(1); // Pause forever.
   }
 
   if (imu.begin() == false) // with no arguments, this uses default addresses (AG:0x6B, M:0x1E) and i2c port (Wire).
   {
-    Serial.println("Failed to communicate with LSM9DS1.");
+     Serial.println("Failed to communicate with LSM9DS1.");
     Serial.println("Double-check wiring.");
-    Serial.println("Default settings in this sketch will "
-                   "work for an out of the box LSM9DS1 "
-                   "Breakout, but may need to be modified "
+    Serial.println("Default settings in this sketch will " \
+                   "work for an out of the box LSM9DS1 " \
+                   "Breakout, but may need to be modified " \
                    "if the board jumpers are.");
-    while (1)
-      ;
+    while (1);
   }
 
+
   // Get the baseline pressure:
-
+  
   baseline = getPressure();
-
+  
   Serial.print("baseline pressure: ");
   Serial.print(baseline);
-  Serial.println(" mb");
+  Serial.println(" mb");  
 }
 
 void loop()
 {
-  double a, P;
-
+  double a,P;
+  
   // Get a new pressure reading:
 
   P = getPressure();
@@ -162,35 +107,33 @@ void loop()
   // Show the relative altitude difference between
   // the new reading and the baseline reading:
 
-  a = pressure.altitude(P, baseline);
-  double Time = millis();
+  a = pressure.altitude(P,baseline);
+  double  Time = millis();
   Serial.print("Time espiled: ");
-  Serial.println(Time);
+  Serial.println(Time); 
   Serial.print("relative altitude: ");
-  if (a >= 0.0)
-    Serial.print(" "); // add a space for positive numbers
-  Serial.print(a, 1);
+  if (a >= 0.0) Serial.print(" "); // add a space for positive numbers
+  Serial.print(a,1);
   Serial.print(" meters, ");
-  if (a >= 0.0)
-    Serial.print(" "); // add a space for positive numbers
-  Serial.print(a * 3.28084, 0);
+  if (a >= 0.0) Serial.print(" "); // add a space for positive numbers
+  Serial.print(a*3.28084,0);
   Serial.println(" feet");
   Serial.println();
-  if (imu.gyroAvailable())
+  if ( imu.gyroAvailable() )
   {
     // To read from the gyroscope,  first call the
     // readGyro() function. When it exits, it'll update the
     // gx, gy, and gz variables with the most current data.
     imu.readGyro();
   }
-  if (imu.accelAvailable())
+  if ( imu.accelAvailable() )
   {
     // To read from the accelerometer, first call the
     // readAccel() function. When it exits, it'll update the
     // ax, ay, and az variables with the most current data.
     imu.readAccel();
   }
-  if (imu.magAvailable())
+  if ( imu.magAvailable() )
   {
     // To read from the magnetometer, first call the
     // readMag() function. When it exits, it'll update the
@@ -217,13 +160,14 @@ void loop()
   delay(100);
 }
 
+
 double getPressure()
 {
   char status;
-  double T, P, p0, a;
+  double T,P,p0,a;
 
   // You must first get a temperature measurement to perform a pressure reading.
-
+  
   // Start a temperature measurement:
   // If request is successful, the number of ms to wait is returned.
   // If request is unsuccessful, 0 is returned.
@@ -261,39 +205,35 @@ double getPressure()
         // (If temperature is stable, you can do one temperature measurement for a number of pressure measurements.)
         // Function returns 1 if successful, 0 if failure.
 
-        status = pressure.getPressure(P, T);
+        status = pressure.getPressure(P,T);
         if (status != 0)
         {
-          return (P);
+          return(P);
         }
-        else
-          Serial.println("error retrieving pressure measurement\n");
+        else Serial.println("error retrieving pressure measurement\n");
       }
-      else
-        Serial.println("error starting pressure measurement\n");
+      else Serial.println("error starting pressure measurement\n");
     }
-    else
-      Serial.println("error retrieving temperature measurement\n");
+    else Serial.println("error retrieving temperature measurement\n");
   }
-  else
-    Serial.println("error starting temperature measurement\n");
+  else Serial.println("error starting temperature measurement\n");
 
   // Update the sensor values whenever new data is available
-  if (imu.gyroAvailable())
+  if ( imu.gyroAvailable() )
   {
     // To read from the gyroscope,  first call the
     // readGyro() function. When it exits, it'll update the
     // gx, gy, and gz variables with the most current data.
     imu.readGyro();
   }
-  if (imu.accelAvailable())
+  if ( imu.accelAvailable() )
   {
     // To read from the accelerometer, first call the
     // readAccel() function. When it exits, it'll update the
     // ax, ay, and az variables with the most current data.
     imu.readAccel();
   }
-  if (imu.magAvailable())
+  if ( imu.magAvailable() )
   {
     // To read from the magnetometer, first call the
     // readMag() function. When it exits, it'll update the
@@ -364,6 +304,7 @@ void printAccel()
   Serial.print(", ");
   Serial.println(imu.az);
 #endif
+
 }
 
 void printMag()
@@ -408,28 +349,17 @@ void printAttitude(float ax, float ay, float az, float mx, float my, float mz)
 
   heading -= DECLINATION * PI / 180;
 
-  if (heading > PI)
-    heading -= (2 * PI);
-  else if (heading < -PI)
-    heading += (2 * PI);
+  if (heading > PI) heading -= (2 * PI);
+  else if (heading < -PI) heading += (2 * PI);
 
   // Convert everything from radians to degrees:
   heading *= 180.0 / PI;
   pitch *= 180.0 / PI;
-  roll *= 180.0 / PI;
+  roll  *= 180.0 / PI;
 
   Serial.print("Pitch, Roll: ");
   Serial.print(pitch, 2);
   Serial.print(", ");
   Serial.println(roll, 2);
-  Serial.print("Heading: ");
-  Serial.println(heading, 2);
-} 
-
-void printAddress(uint8_t address)  {
-	Serial.print("0x");
-	if (address<0x10) {
-		Serial.print("0");
-	}
-	Serial.println(address,HEX);
+  Serial.print("Heading: "); Serial.println(heading, 2);
 }

@@ -36,6 +36,7 @@ V10 Mike Grusin, SparkFun Electronics 10/24/2013
 #include <Wire.h>
 #include <SPI.h>
 #include <SparkFunLSM9DS1.h>
+#include <Sys_Init.h>
 // You will need to create an SFE_BMP180 object, here called "pressure":
 
 SFE_BMP180 pressure;
@@ -43,7 +44,7 @@ LSM9DS1 imu;
 
 #define LSM9DS1_M  0x1E // Would be 0x1C if SDO_M is LOW
 #define LSM9DS1_AG 0x6B
-
+#define BAUD_RATE 115200
 #define PRINT_CALCULATED
 //#define PRINT_RAW
 #define PRINT_SPEED 250 // 250 ms between prints
@@ -59,11 +60,13 @@ void printAttitude(float ax, float ay, float az, float mx, float my, float mz);
 
 void setup()
 {
-  Serial.begin(9600);
-  Serial.println("REBOOT");
+  System_COM_Init(BAUD_RATE);
+  Alt_Init();
+  IMU_Init();
+  //Serial.println("REBOOT");
 
   // Initialize the sensor (it is important to get calibration values stored on the device).
-
+/*
   if (pressure.begin())
     Serial.println("BMP180 init success");
   else
@@ -74,7 +77,8 @@ void setup()
     Serial.println("BMP180 init fail (disconnected?)\n\n");
     while(1); // Pause forever.
   }
-
+*/
+/*
   if (imu.begin() == false) // with no arguments, this uses default addresses (AG:0x6B, M:0x1E) and i2c port (Wire).
   {
      Serial.println("Failed to communicate with LSM9DS1.");
@@ -86,7 +90,7 @@ void setup()
     while (1);
   }
 
-
+*/
   // Get the baseline pressure:
   
   baseline = getPressure();

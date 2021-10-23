@@ -1,10 +1,10 @@
+#include <Arduino.h>
 #include <SFE_BMP180.h>
 #include <SparkFunLSM9DS1.h>
 
 #define LSM9DS1_M 0x1E // Would be 0x1C if SDO_M is LOW
 #define LSM9DS1_AG 0x6B
 #define PRINT_CALCULATED
-//#define PRINT_RAW
 #define PRINT_SPEED 250 // 250 ms between prints
 static unsigned long lastPrint = 0;
 #define DECLINATION -8.58 // Declination (degrees) in Boulder, CO.

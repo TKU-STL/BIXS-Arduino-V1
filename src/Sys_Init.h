@@ -3,7 +3,7 @@
 #include <SparkFunLSM9DS1.h>
 
 SFE_BMP180 Altimeter;
-LSM9DS1 imu;
+LSM9DS1 IMU;
 
 double pressure, baseline;
 
@@ -11,7 +11,6 @@ double getPressure()
 {
     char status;
     double T, P;
-    //p0, a;
 
     // You must first get a temperature measurement to perform a pressure reading.
 
@@ -110,7 +109,7 @@ void Alt_Init()
 void IMU_Init()
 {
     // Initialize the accelerometer and gyroscope:
-    if (imu.begin() == false) // with no arguments, this uses default addresses (AG:0x6B, M:0x1E) and i2c port (Wire).
+    if (IMU.begin() == false) // with no arguments, this uses default addresses (AG:0x6B, M:0x1E) and i2c port (Wire).
     {
         Serial.println("Failed to communicate with LSM9DS1.");
         Serial.println("Double-check wiring.");

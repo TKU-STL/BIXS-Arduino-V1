@@ -182,7 +182,7 @@ void IMU_Update()
 }
 
 void I2C_Op()
-{
+{ 
   I2CM.openAll();
   //I2CMUX.openChannel(0);
   //I2CMUX.openChannel(1);

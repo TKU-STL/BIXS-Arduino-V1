@@ -180,3 +180,12 @@ void IMU_Update()
   Serial.println("--------------------------------------------------------");
   delay(100);
 }
+
+void I2C_Op()
+{
+  I2CM.openAll();
+  //I2CMUX.openChannel(0);
+  //I2CMUX.openChannel(1);
+  //I2CMUX.openChannel(2);
+  //I2CMUX.openChannel(3);
+}

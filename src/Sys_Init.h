@@ -1,9 +1,12 @@
+#include <Wire.h>
 #include <Arduino.h>
+#include <TCA9548A.h>
 #include <SFE_BMP180.h>
 #include <SparkFunLSM9DS1.h>
 
-SFE_BMP180 Altimeter;
+TCA9548A I2CM; // I2C multiplexer
 LSM9DS1 IMU;
+SFE_BMP180 Altimeter;
 
 double pressure, baseline;
 
@@ -121,4 +124,9 @@ void IMU_Init()
     {
         Serial.println("LSM9DS1 init success");
     }
+}
+
+void I2CMULT_Init(int I2C)
+{
+    I2CM.begin(Wire);
 }

@@ -7,7 +7,7 @@
 #include <Sys_Op.h>
 
 //Define the Baudrate for the serial communication (Applies to all functions)
-#define BAUD_RATE 9200
+#define BAUD_RATE 9600
 const unsigned int I2C = 0x70;
 
 void setup()

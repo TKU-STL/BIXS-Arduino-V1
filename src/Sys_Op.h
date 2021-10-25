@@ -130,17 +130,16 @@ void Alt_Update()
     Serial.println(Time);
 
     Serial.print("relative altitude: ");
-    if (alt >= 0.0)
-        Serial.print(" "); // add a space for positive numbers
+    if (alt >= 0.0){
+      Serial.print(" "); // add a space for positive numbers
+    }
     Serial.print(alt, 1);
     Serial.print(" meters, ");
-    if (alt >= 0.0)
-        Serial.print(" "); // add a space for positive numbers
 }
 
 void IMU_Update()
 {
-      if (IMU.gyroAvailable())
+  if (IMU.gyroAvailable())
   {
     // To read from the gyroscope,  first call the
     // readGyro() function. When it exits, it'll update the
@@ -179,13 +178,4 @@ void IMU_Update()
   }
   Serial.println("--------------------------------------------------------");
   delay(100);
-}
-
-void I2C_Op()
-{ 
-  I2CM.openAll();
-  //I2CMUX.openChannel(0);
-  //I2CMUX.openChannel(1);
-  //I2CMUX.openChannel(2);
-  //I2CMUX.openChannel(3);
 }

@@ -1,12 +1,11 @@
 #include <Wire.h>
 #include <Arduino.h>
-#include <TCA9548A.h>
 #include <SFE_BMP180.h>
 #include <SparkFunLSM9DS1.h>
 
-TCA9548A I2CM; // I2C multiplexer
 LSM9DS1 IMU;
 SFE_BMP180 Altimeter;
+XBee XB = XBee();
 
 double pressure, baseline;
 
@@ -126,7 +125,12 @@ void IMU_Init()
     }
 }
 
-void I2CMULT_Init(int I2C)
+void XBee_Init()
 {
-    I2CM.begin(Wire);
+    Serial.println("XBee_Init");
+    XB.setSerial(Serial);
+    if (Serial.available())
+    {
+        Serial.println("XBee Serial Communication Successful");
+    }
 }

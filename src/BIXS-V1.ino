@@ -29,5 +29,12 @@ void loop()
   //XBee_Com(command);
   Alt_Update();
   IMU_Update();
-  Kalman_Update();
+  Serial.println("----------------Kalman Fliter Output----------------");
+  Kalman_Update_Alt();
+  Kalman_Update_AccX();
+  Kalman_Update_AccY();
+  Kalman_Update_AccZ();
+  Kalman_Update_GyroX();
+  Kalman_Update_GyroY();
+  Kalman_Update_GyroZ();
 }

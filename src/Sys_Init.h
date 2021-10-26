@@ -1,11 +1,14 @@
 #include <Wire.h>
+#include <XBee.h>
 #include <Arduino.h>
 #include <SFE_BMP180.h>
+#include <SoftwareSerial.h>
 #include <SparkFunLSM9DS1.h>
 
 LSM9DS1 IMU;
 SFE_BMP180 Altimeter;
-XBee XB = XBee();
+XBee XBee_A = XBee();
+SoftwareSerial nss(8,9);
 
 double pressure, baseline;
 
@@ -39,7 +42,6 @@ double getPressure()
             // The parameter is the oversampling setting, from 0 to 3 (highest res, longest wait).
             // If request is successful, the number of ms to wait is returned.
             // If request is unsuccessful, 0 is returned.
-
             status = Altimeter.startPressure(3);
             if (status != 0)
             {
@@ -94,7 +96,6 @@ void Alt_Init()
     {
         // Oops, something went wrong, this is usually a connection problem,
         // see the comments at the top of this sketch for the proper connections.
-
         Serial.println("BMP180 init fail (disconnected?)\n\n");
         while (1)
             ; // Pause forever.
@@ -128,7 +129,7 @@ void IMU_Init()
 void XBee_Init()
 {
     Serial.println("XBee_Init");
-    XB.setSerial(Serial);
+    XBee_A.setSerial(Serial);
     if (Serial.available())
     {
         Serial.println("XBee Serial Communication Successful");

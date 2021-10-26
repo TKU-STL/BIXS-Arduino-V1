@@ -124,11 +124,7 @@ void Alt_Update()
     // Show the relative altitude difference between
     // the new reading and the baseline reading:
     alt = Altimeter.altitude(pressure, baseline);
-    double Time = millis();
-
-    Serial.print("Time espiled: ");
-    Serial.println(Time);
-
+    
     Serial.print("relative altitude: ");
     if (alt >= 0.0){
       Serial.print(" "); // add a space for positive numbers
@@ -178,4 +174,72 @@ void IMU_Update()
   }
   Serial.println("--------------------------------------------------------");
   delay(100);
+}
+
+void Mission_Clock_Update()
+{
+  double Mission_Clock_Time = millis();
+  Mission_Clock_Time = Mission_Clock_Time/1000;
+  Serial.print("Mission Clock Time (in second): ");
+  Serial.println(Mission_Clock_Time);
+}
+
+void XBee_Com(char command)
+{
+  if(command == 'l'){
+    Serial.println("Launch Sequence Started");
+    for(int i = 0; i < 10; i++){
+      Serial.print("Time-minus: ");
+      Serial.println(i);
+      delay(1000);
+    }
+  }else if(command == 's'){
+    Serial.println("Shutdown Sequence Started");
+  }else if(command == 'r'){
+    Serial.println("Reset Sequence Started");
+  }else if(command == 'a'){
+    Serial.println("Aborted");
+  }else{
+    Serial.println("Invalid Command");
+  }
+}
+
+double Alt_Output()
+{
+  double alt;
+  // Get a new pressure reading
+  // Show the relative altitude difference between
+  // the new reading and the baseline reading:
+  alt = Altimeter.altitude(pressure, baseline);
+  return alt;
+}
+
+double IMU_AccX()
+{
+  return IMU.ax;
+}
+
+double IMU_AccY()
+{
+  return IMU.ay;
+}
+
+double IMU_AccZ()
+{
+  return IMU.az;
+}
+
+double IMU_GyroX()
+{
+  return IMU.gx;
+}
+
+double IMU_GyroY()
+{
+  return IMU.gy;
+}
+
+double IMU_GyroZ()
+{
+  return IMU.gz;
 }

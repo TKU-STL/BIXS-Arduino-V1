@@ -1,8 +1,9 @@
 #include <SPI.h>
 #include <Wire.h>
 #include <Arduino.h>
-#include <SFE_BMP180.h>
 #include <SparkFunLSM9DS1.h>
+#include <Adafruit_Sensor.h>
+#include <Adafruit_BMP085_U.h>
 #include <Sys_Init.h>
 #include <Sys_Op.h>
 #include <Kalman_Fliter.h>
@@ -15,7 +16,7 @@ void setup()
 {
   //Initialize Serial
   SysCom_Init(BAUD_RATE);
-  XBee_Init();
+  //XBee_Init();
   //Initialize the sensor (it is important to get calibration values stored on the device).
   Alt_Init(); //Altimeter initialization
   IMU_Init(); //IMU initialization

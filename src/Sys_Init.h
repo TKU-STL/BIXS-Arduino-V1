@@ -1,80 +1,15 @@
 #include <Wire.h>
 #include <XBee.h>
 #include <Arduino.h>
-#include <SFE_BMP180.h>
 #include <SoftwareSerial.h>
 #include <SparkFunLSM9DS1.h>
+#include <Adafruit_Sensor.h>
+#include <Adafruit_BMP085_U.h>
 
 LSM9DS1 IMU;
-SFE_BMP180 Altimeter;
-XBee XBee_A = XBee();
-SoftwareSerial nss(8,9);
-
-double pressure, baseline;
-
-double getPressure()
-{
-    char status;
-    double T, P;
-
-    // You must first get a temperature measurement to perform a pressure reading.
-
-    // Start a temperature measurement:
-    // If request is successful, the number of ms to wait is returned.
-    // If request is unsuccessful, 0 is returned.
-
-    status = Altimeter.startTemperature();
-    if (status != 0)
-    {
-        // Wait for the measurement to complete:
-
-        delay(status);
-
-        // Retrieve the completed temperature measurement:
-        // Note that the measurement is stored in the variable T.
-        // Use '&T' to provide the address of T to the function.
-        // Function returns 1 if successful, 0 if failure.
-
-        status = Altimeter.getTemperature(T);
-        if (status != 0)
-        {
-            // Start a pressure measurement:
-            // The parameter is the oversampling setting, from 0 to 3 (highest res, longest wait).
-            // If request is successful, the number of ms to wait is returned.
-            // If request is unsuccessful, 0 is returned.
-            status = Altimeter.startPressure(3);
-            if (status != 0)
-            {
-                // Wait for the measurement to complete:
-                delay(status);
-
-                // Retrieve the completed pressure measurement:
-                // Note that the measurement is stored in the variable P.
-                // Use '&P' to provide the address of P.
-                // Note also that the function requires the previous temperature measurement (T).
-                // (If temperature is stable, you can do one temperature measurement for a number of pressure measurements.)
-                // Function returns 1 if successful, 0 if failure.
-
-                status = Altimeter.getPressure(P, T);
-                if (status != 0)
-                {
-                    return P;
-                }
-                else
-                {
-                    Serial.println("error retrieving pressure measurement\n");
-                }
-            }
-            else
-            {
-                Serial.println("error starting pressure measurement\n");
-                Serial.println("error starting temperature measurement\n");
-                Serial.println("error retrieving temperature measurement\n");
-            }
-        }
-    }
-    return P;
-}
+Adafruit_BMP085_Unified Altimeter = Adafruit_BMP085_Unified(10085);
+//XBee XBee_A = XBee();
+//SoftwareSerial nss(8,9);
 
 void SysCom_Init(long int BAUDRATE)
 {
@@ -86,27 +21,36 @@ void SysCom_Init(long int BAUDRATE)
     }
 }
 
+void displaySensorDetails(void)
+{
+  sensor_t sensor;
+  Altimeter.getSensor(&sensor);
+  Serial.println("------------------------------------");
+  Serial.print  ("Sensor:       "); Serial.println(sensor.name);
+  Serial.print  ("Driver Ver:   "); Serial.println(sensor.version);
+  Serial.print  ("Unique ID:    "); Serial.println(sensor.sensor_id);
+  Serial.print  ("Max Value:    "); Serial.print(sensor.max_value); Serial.println(" hPa");
+  Serial.print  ("Min Value:    "); Serial.print(sensor.min_value); Serial.println(" hPa");
+  Serial.print  ("Resolution:   "); Serial.print(sensor.resolution); Serial.println(" hPa");  
+  Serial.println("------------------------------------");
+  Serial.println("");
+  delay(500);
+}
+
 void Alt_Init()
 {
-    if (Altimeter.begin())
-    {
-        Serial.println("BMP180 init success");
-    }
-    else
-    {
-        // Oops, something went wrong, this is usually a connection problem,
-        // see the comments at the top of this sketch for the proper connections.
-        Serial.println("BMP180 init fail (disconnected?)\n\n");
-        while (1)
-            ; // Pause forever.
-    }
-
-    double baseline;
-    baseline = getPressure();
-
-    Serial.print("baseline pressure: ");
-    Serial.print(baseline);
-    Serial.println(" mb");
+    Serial.println("Pressure Sensor Test"); Serial.println("");
+  
+  /* Initialise the sensor */
+  if(!Altimeter.begin())
+  {
+    /* There was a problem detecting the BMP085 ... check your connections */
+    Serial.print("Ooops, no BMP085 detected ... Check your wiring or I2C ADDR!");
+    while(1);
+  }
+  
+  /* Display some basic information on this sensor */
+  displaySensorDetails();
 }
 
 void IMU_Init()
@@ -125,7 +69,7 @@ void IMU_Init()
         Serial.println("LSM9DS1 init success");
     }
 }
-
+/*
 void XBee_Init()
 {
     Serial.println("XBee_Init");
@@ -134,4 +78,4 @@ void XBee_Init()
     {
         Serial.println("XBee Serial Communication Successful");
     }
-}
+}*/

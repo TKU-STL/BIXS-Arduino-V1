@@ -21,7 +21,7 @@ void setup()
   Alt_Init(); //Altimeter initialization
   IMU_Init(); //IMU initialization
   //Kalman filter initialization
-  //Kalman_Init(); 
+  Kalman_Init(); 
 }
 
 void loop()
@@ -30,8 +30,6 @@ void loop()
   //XBee_Com(command);
   Alt_Update();
   IMU_Update();
-  /*
-  //Kalman Filtered Data Output
   Serial.println("----------------Kalman Fliter Output----------------");
   Kalman_Update_Alt();
   Kalman_Update_AccX();
@@ -40,6 +38,4 @@ void loop()
   Kalman_Update_GyroX();
   Kalman_Update_GyroY();
   Kalman_Update_GyroZ();
-*/
-delay(500);
 }

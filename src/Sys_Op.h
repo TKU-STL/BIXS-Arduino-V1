@@ -127,14 +127,12 @@ void Alt_Update()
 {
   Altimeter.getEvent(&event);
   /* Display the results (barometric pressure is measure in hPa) */
-  if (event.pressure)
-  {
-    /* Display atmospheric pressue in hPa */
-    Serial.print("Pressure:    ");
-    Serial.print(event.pressure);
-    Serial.println(" hPa");
+  /* Display atmospheric pressue in hPa */
+  Serial.print("Pressure:    ");
+  Serial.print(event.pressure);
+  Serial.println(" hPa");
 
-    /* Calculating altitude with reasonable accuracy requires pressure    *
+  /* Calculating altitude with reasonable accuracy requires pressure    *
      * sea level pressure for your position at the moment the data is     *
      * converted, as well as the ambient temperature in degress           *
      * celcius.  If you don't have these values, a 'generic' value of     *
@@ -149,26 +147,23 @@ void Alt_Update()
      * For example, for Paris, France you can check the current mean      *
      * pressure and sea level at: http://bit.ly/16Au8ol                   */
 
-    /* First we get the current temperature from the BMP085 */
-    float temperature;
-    Altimeter.getTemperature(&temperature);
-    Serial.print("Temperature: ");
-    Serial.print(temperature);
-    Serial.println(" C");
+  /* First we get the current temperature from the BMP085 */
+  float temperature;
+  Altimeter.getTemperature(&temperature);
+  Serial.print("Temperature: ");
+  Serial.print(temperature);
+  Serial.println(" C");
 
-    /* Then convert the atmospheric pressure, and SLP to altitude         */
-    /* Update this next line with the current SLP for better results      */
-    //float seaLevelPressure = SENSORS_PRESSURE_SEALEVELHPA;
-    Serial.print("Altitude:    ");
-    Serial.print(Altimeter.pressureToAltitude(seaLevelPressure,
-                                              event.pressure));
-    Serial.println(" m");
-    Serial.println("");
-  }
-  else
-  {
-    Serial.println("Sensor error");
-  }
+  /* Then convert the atmospheric pressure, and SLP to altitude         */
+  /* Update this next line with the current SLP for better results      */
+  //float seaLevelPressure = SENSORS_PRESSURE_SEALEVELHPA;
+  Serial.print("Altitude:    ");
+  Serial.print(Altimeter.pressureToAltitude(seaLevelPressure,
+                                            event.pressure));
+  Serial.println(" m");
+  Serial.println("");
+  //Serial.println("Sensor error");
+
   delay(1000);
 }
 

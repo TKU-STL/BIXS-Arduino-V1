@@ -9,7 +9,6 @@
 #define PRINT_SPEED 250 // 250 ms between prints
 static unsigned long lastPrint = 0;
 #define DECLINATION -8.58 // Declination (degrees) in Boulder, CO.
-#define ALTITUDE 57
 
 /* Get a new sensor event */
 sensors_event_t event;
@@ -125,6 +124,7 @@ void printAttitude(float ax, float ay, float az, float mx, float my, float mz)
 
 void Alt_Update()
 {
+<<<<<<< HEAD
   Altimeter.getEvent(&event);
   /* Display the results (barometric pressure is measure in hPa) */
   /* Display atmospheric pressue in hPa */
@@ -165,6 +165,20 @@ void Alt_Update()
   //Serial.println("Sensor error");
 
   delay(1000);
+=======
+    double alt;
+    // Get a new pressure reading
+    // Show the relative altitude difference between
+    // the new reading and the baseline reading:
+    alt = Altimeter.altitude(pressure, baseline);
+    
+    Serial.print("relative altitude: ");
+    if (alt >= 0.0){
+      Serial.print(" "); // add a space for positive numbers
+    }
+    Serial.print(alt, 1);
+    Serial.print(" meters, ");
+>>>>>>> parent of fac170b (Alt update)
 }
 
 void IMU_Update()

@@ -120,50 +120,25 @@ void printAttitude(float ax, float ay, float az, float mx, float my, float mz)
 
 void Alt_Update()
 {
-  /*
-    double alt;
-    double baseline;
-    baseline = getPressure();
-    double sea_level_pressure;
-    sea_level_pressure = Altimeter.sealevel(baseline, ALTITUDE);
-
-    Serial.print("baseline pressure: ");
-    Serial.print(baseline);
-    Serial.println(" mb");
-    // Get a new pressure reading
-    // Show the relative altitude difference between
-    // the new reading and the baseline reading:
-    alt = Altimeter.altitude(pressure, sea_level_pressure);
-    
-    Serial.print("relative altitude: ");
-    if (alt >= 0.0){
-      Serial.print(" "); // add a space for positive numbers
-    }
-    Serial.print(alt);
-    Serial.println(" meters, ");
-*/
-
-char status;
-  double T,P,p0,a;
 
   // Loop here getting pressure readings every 10 seconds.
 
   // If you want sea-level-compensated pressure, as used in weather reports,
   // you will need to know the altitude at which your measurements are taken.
   // We're using a constant called ALTITUDE in this sketch:
-  
+
   Serial.println();
   Serial.print("provided altitude: ");
-  Serial.print(ALTITUDE,0);
+  Serial.print(ALTITUDE, 0);
   Serial.print(" meters, ");
-  Serial.print(ALTITUDE*3.28084,0);
+  Serial.print(ALTITUDE * 3.28084, 0);
   Serial.println(" feet");
-  
+
   // If you want to measure altitude, and not pressure, you will instead need
   // to provide a known baseline pressure. This is shown at the end of the sketch.
 
   // You must first get a temperature measurement to perform a pressure reading.
-  
+
   // Start a temperature measurement:
   // If request is successful, the number of ms to wait is returned.
   // If request is unsuccessful, 0 is returned.
@@ -183,11 +158,11 @@ char status;
     {
       // Print out the measurement:
       Serial.print("temperature: ");
-      Serial.print(T,2);
+      Serial.print(T, 2);
       Serial.print(" deg C, ");
-      Serial.print((9.0/5.0)*T+32.0,2);
+      Serial.print((9.0 / 5.0) * T + 32.0, 2);
       Serial.println(" deg F");
-      
+
       // Start a pressure measurement:
       // The parameter is the oversampling setting, from 0 to 3 (highest res, longest wait).
       // If request is successful, the number of ms to wait is returned.
@@ -205,14 +180,14 @@ char status;
         // (If temperature is stable, you can do one temperature measurement for a number of pressure measurements.)
         // Function returns 1 if successful, 0 if failure.
 
-        status = Altimeter.getPressure(P,T);
+        status = Altimeter.getPressure(P, T);
         if (status != 0)
         {
           // Print out the measurement:
           Serial.print("absolute pressure: ");
-          Serial.print(P,2);
+          Serial.print(P, 2);
           Serial.print(" mb, ");
-          Serial.print(P*0.0295333727,2);
+          Serial.print(P * 0.0295333727, 2);
           Serial.println(" inHg");
 
           // The pressure sensor returns abolute pressure, which varies with altitude.
@@ -221,11 +196,11 @@ char status;
           // Parameters: P = absolute pressure in mb, ALTITUDE = current altitude in m.
           // Result: p0 = sea-level compensated pressure in mb
 
-          p0 = Altimeter.sealevel(P,ALTITUDE); // we're at 1655 meters (Boulder, CO)
+          p0 = Altimeter.sealevel(P, ALTITUDE); // we're at 1655 meters (Boulder, CO)
           Serial.print("relative (sea-level) pressure: ");
-          Serial.print(p0,2);
+          Serial.print(p0, 2);
           Serial.print(" mb, ");
-          Serial.print(p0*0.0295333727,2);
+          Serial.print(p0 * 0.0295333727, 2);
           Serial.println(" inHg");
 
           // On the other hand, if you want to determine your altitude from the pressure reading,
@@ -233,20 +208,24 @@ char status;
           // Parameters: P = absolute pressure in mb, p0 = baseline pressure in mb.
           // Result: a = altitude in m.
 
-          a = Altimeter.altitude(P,p0);
+          a = Altimeter.altitude(P, p0);
           Serial.print("computed altitude: ");
           Serial.print(a, 4);
           Serial.print(" meters, ");
-          Serial.print(a*3.28084,0);
+          Serial.print(a * 3.28084, 0);
           Serial.println(" feet");
         }
-        else Serial.println("error retrieving pressure measurement\n");
+        else
+          Serial.println("error retrieving pressure measurement\n");
       }
-      else Serial.println("error starting pressure measurement\n");
+      else
+        Serial.println("error starting pressure measurement\n");
     }
-    else Serial.println("error retrieving temperature measurement\n");
+    else
+      Serial.println("error retrieving temperature measurement\n");
   }
-  else Serial.println("error starting temperature measurement\n");
+  else
+    Serial.println("error starting temperature measurement\n");
 
   //delay(5000);  // Pause for 5 seconds.
 }
@@ -297,27 +276,37 @@ void IMU_Update()
 void Mission_Clock_Update()
 {
   double Mission_Clock_Time = millis();
-  Mission_Clock_Time = Mission_Clock_Time/1000;
+  Mission_Clock_Time = Mission_Clock_Time / 1000;
   Serial.print("Mission Clock Time (in second): ");
   Serial.println(Mission_Clock_Time);
 }
 
 void XBee_Com(char command)
 {
-  if(command == 'l'){
+  if (command == 'l')
+  {
     Serial.println("Launch Sequence Started");
-    for(int i = 0; i < 10; i++){
+    for (int i = 0; i < 10; i++)
+    {
       Serial.print("Time-minus: ");
       Serial.println(i);
       delay(1000);
     }
-  }else if(command == 's'){
+  }
+  else if (command == 's')
+  {
     Serial.println("Shutdown Sequence Started");
-  }else if(command == 'r'){
+  }
+  else if (command == 'r')
+  {
     Serial.println("Reset Sequence Started");
-  }else if(command == 'a'){
+  }
+  else if (command == 'a')
+  {
     Serial.println("Aborted");
-  }else{
+  }
+  else
+  {
     Serial.println("Invalid Command");
   }
 }

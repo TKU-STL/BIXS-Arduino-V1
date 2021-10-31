@@ -1,6 +1,6 @@
+#include <Wire.h>
 #include <Arduino.h>
 #include <SFE_BMP180.h>
-#include <Wire.h>
 
 #define ALTITUDE 54
 
@@ -69,6 +69,7 @@ void Alt_Init()
 {
   Serial.begin(9600);
   Serial.println("REBOOT");
+  Altimeter.begin();
 
   // Initialize the sensor (it is important to get calibration values stored on the device).
 

@@ -21,16 +21,18 @@ void setup()
   Alt_Init(); //Altimeter initialization
   IMU_Init(); //IMU initialization
   //Kalman filter initialization
-  Kalman_Init();
+  //Kalman_Init();
 }
 
 void loop()
 {
+  //Serial.println("Start");
   //char command = Serial.read();
   //XBee_Com(command);
   System_Clock();
   Alt_Update();
   IMU_Update();
+  /*
   Serial.println("----------------Kalman Fliter Output----------------");
   Kalman_Update_Alt();
   Kalman_Update_AccX();
@@ -39,4 +41,5 @@ void loop()
   Kalman_Update_GyroX();
   Kalman_Update_GyroY();
   Kalman_Update_GyroZ();
+*/
 }

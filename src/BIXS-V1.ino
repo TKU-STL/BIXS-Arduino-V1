@@ -1,3 +1,4 @@
+#include <SPI.h>
 #include <Wire.h>
 #include <Arduino.h>
 #include <SparkFunLSM9DS1.h>
@@ -5,8 +6,9 @@
 #include <Sys_Init.h>
 #include <Altimeter.h>
 #include <IMU.h>
-#include <Kalman_Fliter.h>
+//#include <Kalman_Fliter.h>
 #include <System_Utility.h>
+#include <Test.h>
 
 //Define the Baudrate for the serial communication (Applies to all functions)
 #define BAUD_RATE 9600
@@ -18,8 +20,8 @@ void setup()
   SysCom_Init(BAUD_RATE);
   //XBee_Init();
   //Initialize the sensor (it is important to get calibration values stored on the device).
-  Alt_Init(); //Altimeter initialization
-  IMU_Init(); //IMU initialization
+  //Alt_Init(); //Altimeter initialization
+  //IMU_Init(); //IMU initialization
   //Kalman filter initialization
   //Kalman_Init();
 }
@@ -30,8 +32,12 @@ void loop()
   //char command = Serial.read();
   //XBee_Com(command);
   System_Clock();
-  Alt_Update();
-  IMU_Update();
+  TestDataStream();
+  Serial.println("");
+  //Serial.println("Ok");
+  //Alt_Update();
+  //IMU_Update();
+  delay(500);
   /*
   Serial.println("----------------Kalman Fliter Output----------------");
   Kalman_Update_Alt();

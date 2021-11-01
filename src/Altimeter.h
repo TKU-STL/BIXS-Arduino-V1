@@ -69,7 +69,6 @@ void Alt_Init()
 {
   Serial.begin(9600);
   Serial.println("REBOOT");
-  Altimeter.begin();
 
   // Initialize the sensor (it is important to get calibration values stored on the device).
 

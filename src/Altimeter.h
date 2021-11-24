@@ -193,7 +193,7 @@ void Alt_Update()
   else
     Serial.println("error starting temperature measurement\n");
 
-  delay(5000); // Pause for 5 seconds.
+  //delay(5000); // Pause for 5 seconds.
 }
 
 double Alt_Output()

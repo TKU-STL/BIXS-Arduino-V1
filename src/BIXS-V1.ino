@@ -12,14 +12,13 @@
 
 //Define the Baudrate for the serial communication (Applies to all functions)
 #define BAUD_RATE 9600
-#define DELAY 250
+const int DELAY = 2000;
 const unsigned int I2C = 0x70;
 
 void setup()
 {
   //Initialize Serial
   SysCom_Init(BAUD_RATE);
-  //XBee_Init();
   //Initialize the sensor (it is important to get calibration values stored on the device).
   Alt_Init(); //Altimeter initialization
   IMU_Init(); //IMU initialization
@@ -29,17 +28,19 @@ void setup()
 
 void loop()
 {
-  //Serial.println("Start");
-  //char command = Serial.read();
-  //XBee_Com(command);
-  System_Clock();
-  //TestDataStream();
-  //Serial.println("");
-  //Serial.println("Ok");
-  Alt_Update();
-  IMU_Update();
-  delay(DELAY);
-  /*
+  if ((millis() / 1000) > 10)
+  {
+    System_Clock();
+    Alt_Update();
+    IMU_Update();
+    delay(DELAY);
+  }
+  else
+  {
+    Serial.print("T-minus: ");
+    Serial.println((10-(millis() / 1000)));
+    delay(1000);
+  } /*
   Serial.println("----------------Kalman Fliter Output----------------");
   Kalman_Update_Alt();
   Kalman_Update_AccX();

@@ -11,14 +11,15 @@
 #include <Test.h>
 
 //Define the Baudrate for the serial communication (Applies to all functions)
-#define BAUD_RATE 9600
-const int DELAY = 2000;
+#define BAUDRATE 9600
+const int DELAY = 250;
+const int COUNTDOWN = 40*60;
 const unsigned int I2C = 0x70;
 
 void setup()
 {
   //Initialize Serial
-  SysCom_Init(BAUD_RATE);
+  SysCom_Init(BAUDRATE);
   //Initialize the sensor (it is important to get calibration values stored on the device).
   Alt_Init(); //Altimeter initialization
   IMU_Init(); //IMU initialization
@@ -28,7 +29,7 @@ void setup()
 
 void loop()
 {
-  if ((millis() / 1000) > 10)
+  if ((millis() / 1000) > COUNTDOWN)
   {
     System_Clock();
     Alt_Update();
@@ -38,7 +39,8 @@ void loop()
   else
   {
     Serial.print("T-minus: ");
-    Serial.println((10-(millis() / 1000)));
+    Serial.print((COUNTDOWN-(millis() / 1000)));
+    Serial.println(" seconds");
     delay(1000);
   } /*
   Serial.println("----------------Kalman Fliter Output----------------");

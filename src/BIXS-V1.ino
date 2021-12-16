@@ -13,7 +13,7 @@
 //Define the Baudrate for the serial communication (Applies to all functions)
 #define BAUDRATE 9600
 const int DELAY = 250;
-const int COUNTDOWN = 40*60;
+const int COUNTDOWN = 15*6;
 const unsigned int I2C = 0x70;
 
 void setup()
